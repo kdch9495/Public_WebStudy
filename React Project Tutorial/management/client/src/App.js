@@ -24,36 +24,54 @@ const styles= theme => ({
   }
 })
 
-const customers = [
-  {
-    'id' : 1,
-    'image' : 'http://placeimg.com/64/64/1',
-    'name' : '동찬',
-    'birthday' : '951221',
-    'gender' : '남성',
-    'job' : '직짱인'
-  },
-  {
-    'id' : 2,
-    'image' : 'http://placeimg.com/64/64/2',
-    'name' : '길동',
-    'birthday' : '951222',
-    'gender' : '남성',
-    'job' : '프로그래머'
-  },
-  {
-    'id' : 3,
-    'image' : 'http://placeimg.com/64/64/3',
-    'name' : '찬동',
-    'birthday' : '951223',
-    'gender' : '남성',
-    'job' : '직짱인3'
-    }
-]
+// const customers = [
+//   {
+//     'id' : 1,
+//     'image' : 'http://placeimg.com/64/64/1',
+//     'name' : '동찬',
+//     'birthday' : '951221',
+//     'gender' : '남성',
+//     'job' : '직짱인'
+//   },
+//   {
+//     'id' : 2,
+//     'image' : 'http://placeimg.com/64/64/2',
+//     'name' : '길동',
+//     'birthday' : '951222',
+//     'gender' : '남성',
+//     'job' : '프로그래머'
+//   },
+//   {
+//     'id' : 3,
+//     'image' : 'http://placeimg.com/64/64/3',
+//     'name' : '찬동',
+//     'birthday' : '951223',
+//     'gender' : '남성',
+//     'job' : '직짱인3'
+//     }
+// ]
 
 class App extends Component {
+
+  // state는 변경 가능한 변수 처리
+  state = {
+    customers: ""
+  }
+
+  componentDidMount() {
+    this.callApi()
+      .then(res => this.setState({customers: res}))
+      .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = await fetch('api/customers');
+    const body = await response.json(); // json 형태로 body 변수에 담겠다
+    return body;
+  }
+
   render() { 
-    const { classes } = this.props; // styles가 적용될 수 있게끔 함
+    const { classes } = this.props; // styles가 적용될 수 있게끔 함. props는 변경 불가능한 변수
     return (
       <Paper className={classes.root}>
 
@@ -83,7 +101,7 @@ class App extends Component {
           </TableHead>
           <TableBody>
             {
-              customers.map(c => {
+              this.state.customers ? this.state.customers.map(c => {
                 return (
                   <Customer
                     key={c.id} // map을 사용할때는 key를 반드시 사용해야 함 
@@ -95,8 +113,7 @@ class App extends Component {
                     job={c.job}
                   />
                 ) 
-              })
-            }
+              }) : ""}
           </TableBody>
         </Table>
       </Paper>
