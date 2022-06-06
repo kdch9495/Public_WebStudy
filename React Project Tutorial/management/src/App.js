@@ -1,6 +1,28 @@
 import React, {Component} from 'react';
-import Customer from './components/Customer'
+import Customer from './components/Customer' //customer component 적용
 import './App.css';
+
+//material-ui: material-ui.com/demos/tables 공식 reference 참고하여 Table 작성하기
+import Paper from '@material-ui/core/Paper'; // component의 외부를 감싸기 위한 component
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import { withStyles } from '@material-ui/core/styles';
+
+// styles 변수 정의
+const styles= theme => ({
+  // 바깥 쪽에 해당하는 root
+  root: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3, // 여백을 3의 가중치만큼 주기
+    overflowX: "auto" // X축으로 overflow가 작용
+  },
+  table: {
+    minWidth: 1080 // 무조건 1080픽셀 이상 출력되어 가로스크롤바 생성됨
+  }
+})
 
 const customers = [
   {
@@ -31,8 +53,10 @@ const customers = [
 
 class App extends Component {
   render() { 
+    const { classes } = this.props; // styles가 적용될 수 있게끔 함
     return (
-      <div>
+      <Paper className={classes.root}>
+
         {
         /*
         // 하나만 화면에 출력하고 싶을 떄는 아래와 같이 사용 
@@ -46,24 +70,38 @@ class App extends Component {
         />
         */
         }
-        {
-          customers.map(c => {
-            return (
-              <Customer
-                key={c.id} // map을 사용할때는 key를 반드시 사용해야 함 
-                id={c.id}
-                image={c.image}
-                name={c.name}
-                birthday={c.birthday}
-                gender={c.gender}
-                job={c.job}
-              />
-            ) 
-          })
-        }
-      </div>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              <TableCell>번호</TableCell>
+              <TableCell>이미지</TableCell>
+              <TableCell>이름</TableCell>
+              <TableCell>생년월일</TableCell>
+              <TableCell>성별</TableCell>
+              <TableCell>직업</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {
+              customers.map(c => {
+                return (
+                  <Customer
+                    key={c.id} // map을 사용할때는 key를 반드시 사용해야 함 
+                    id={c.id}
+                    image={c.image}
+                    name={c.name}
+                    birthday={c.birthday}
+                    gender={c.gender}
+                    job={c.job}
+                  />
+                ) 
+              })
+            }
+          </TableBody>
+        </Table>
+      </Paper>
     );
   }
 }
 
-export default App;
+export default withStyles(styles)(App);

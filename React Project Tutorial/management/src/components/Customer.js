@@ -1,14 +1,24 @@
 import React from 'react';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 class Customer extends React.Component {
     render() {
         // render는 항상 수행되는 내용. 항상 return되어야 함 
         // Customer라는 Component를 실제 화면에 그리고자 할 때, 실제 그려지는 내용
         return (
-            <div>
-                <CustomerProfile id={this.props.id} image={this.props.image} name={this.props.name}/>
-                <CustomerInfo birthday={this.props.birthday} gender={this.props.gender} job={this.props.job}/>
-            </div>
+            // <div>
+            //     <CustomerProfile id={this.props.id} image={this.props.image} name={this.props.name}/>
+            //     <CustomerInfo birthday={this.props.birthday} gender={this.props.gender} job={this.props.job}/>
+            // </div>
+            <TableRow>
+                <TableCell>{this.props.id}</TableCell>
+                <TableCell><img src={this.props.image} alt="profile"/></TableCell>
+                <TableCell>{this.props.name}</TableCell>
+                <TableCell>{this.props.birthday}</TableCell>
+                <TableCell>{this.props.gender}</TableCell>
+                <TableCell>{this.props.job}</TableCell>
+            </TableRow>
         )
     }
 }
