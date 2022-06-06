@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles';
 
 // styles 변수 정의
@@ -21,8 +22,11 @@ const styles= theme => ({
   },
   table: {
     minWidth: 1080 // 무조건 1080픽셀 이상 출력되어 가로스크롤바 생성됨
+  },
+  progress: {
+    margin: theme.spacing.unit * 2
   }
-})
+});
 
 // const customers = [
 //   {
@@ -51,14 +55,32 @@ const styles= theme => ({
 //     }
 // ]
 
+/*
+--- Component Life Cycle ---
+
+1) constructor() 불러오기
+
+2) componentWillMount() 불러오기
+
+3) render() Component가 실제로 화면에 그려짐 
+
+4) componentDidMount() 불러와짐
+
+props or state => shouldComponentUpdate()
+props or state 변경되는 경우 shouldComponentUpdate() 등이 사용되어 render를 갱신해줌
+*/
+
+
 class App extends Component {
 
   // state는 변경 가능한 변수 처리
   state = {
-    customers: ""
+    customers: "",
+    completed: 0
   }
 
   componentDidMount() {
+    this.timer = setInterval(this.progress, 20); // 0.02초마다 실행
     this.callApi()
       .then(res => this.setState({customers: res}))
       .catch(err => console.log(err));
@@ -68,6 +90,11 @@ class App extends Component {
     const response = await fetch('api/customers');
     const body = await response.json(); // json 형태로 body 변수에 담겠다
     return body;
+  }
+
+  progress = () => {
+    const {completed } = this.state;
+    this.setState({ completed: completed >= 100 ? 0 : completed + 1 });
   }
 
   render() { 
@@ -113,7 +140,13 @@ class App extends Component {
                     job={c.job}
                   />
                 ) 
-              }) : ""}
+              }) :
+              <TableRow>
+                <TableCell colSpan="6" align="center">
+                  <CircularProgress className={classes.progress} variant ="determinate" value={this.state.completed}/>
+                </TableCell>
+              </TableRow>
+              }
           </TableBody>
         </Table>
       </Paper>
