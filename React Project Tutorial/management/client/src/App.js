@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import Customer from './components/Customer' //customer component 적용
+import Customer from './components/Customer'; //customer component 적용
+import CustomerAdd from './components/CustomerAdd';
 import './App.css';
 
 //material-ui: material-ui.com/demos/tables 공식 reference 참고하여 Table 작성하기
@@ -73,7 +74,7 @@ props or state 변경되는 경우 shouldComponentUpdate() 등이 사용되어 r
 
 class App extends Component {
 
-  // state는 변경 가능한 변수 처리
+  // state는 변경 가능한 변수 처리 (초기화 변수)
   state = {
     customers: "",
     completed: 0
@@ -100,56 +101,58 @@ class App extends Component {
   render() { 
     const { classes } = this.props; // styles가 적용될 수 있게끔 함. props는 변경 불가능한 변수
     return (
-      <Paper className={classes.root}>
-
-        {
-        /*
-        // 하나만 화면에 출력하고 싶을 떄는 아래와 같이 사용 
-        <Customer
-          id={customers[0].id}
-          image={customers[0].iamge}
-          name={customers[0].name}
-          birthday={customers[0].birthday}
-          gender={customers[0].gender}
-          job={customers[0].job}
-        />
-        */
-        }
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              <TableCell>번호</TableCell>
-              <TableCell>이미지</TableCell>
-              <TableCell>이름</TableCell>
-              <TableCell>생년월일</TableCell>
-              <TableCell>성별</TableCell>
-              <TableCell>직업</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {
-              this.state.customers ? this.state.customers.map(c => {
-                return (
-                  <Customer
-                    key={c.id} // map을 사용할때는 key를 반드시 사용해야 함 
-                    id={c.id}
-                    image={c.image}
-                    name={c.name}
-                    birthday={c.birthday}
-                    gender={c.gender}
-                    job={c.job}
-                  />
-                ) 
-              }) :
+      <div>
+        <Paper className={classes.root}>
+          {
+          /*
+          // 하나만 화면에 출력하고 싶을 떄는 아래와 같이 사용 
+          <Customer
+            id={customers[0].id}
+            image={customers[0].iamge}
+            name={customers[0].name}
+            birthday={customers[0].birthday}
+            gender={customers[0].gender}
+            job={customers[0].job}
+          />
+          */
+          }
+          <Table className={classes.table}>
+            <TableHead>
               <TableRow>
-                <TableCell colSpan="6" align="center">
-                  <CircularProgress className={classes.progress} variant ="determinate" value={this.state.completed}/>
-                </TableCell>
+                <TableCell>번호</TableCell>
+                <TableCell>이미지</TableCell>
+                <TableCell>이름</TableCell>
+                <TableCell>생년월일</TableCell>
+                <TableCell>성별</TableCell>
+                <TableCell>직업</TableCell>
               </TableRow>
-              }
-          </TableBody>
-        </Table>
-      </Paper>
+            </TableHead>
+            <TableBody>
+              {
+                this.state.customers ? this.state.customers.map(c => {
+                  return (
+                    <Customer
+                      key={c.id} // map을 사용할때는 key를 반드시 사용해야 함 
+                      id={c.id}
+                      image={c.image}
+                      name={c.name}
+                      birthday={c.birthday}
+                      gender={c.gender}
+                      job={c.job}
+                    />
+                  ) 
+                }) :
+                <TableRow>
+                  <TableCell colSpan="6" align="center">
+                    <CircularProgress className={classes.progress} variant ="determinate" value={this.state.completed}/>
+                  </TableCell>
+                </TableRow>
+                }
+            </TableBody>
+          </Table>
+        </Paper>
+        <CustomerAdd/>
+      </div>
     );
   }
 }

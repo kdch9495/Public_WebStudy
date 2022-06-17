@@ -21,6 +21,10 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
+// npm install --save multer 이후
+const multer = require('multer'); // multer 객체 생성. 중복되지 않는 image가 올라감
+const upload = multer({dest: './upload'}) // 서버의 기본 root폴더에 있는 upload폴더를 사용자의 파일이 upload되는 공간으로 설정
+
 // // api/hello로 접속하면 아래 메시지 출력
 // app.get('/api/hello', (req, res) => {
 //     res.send({message: "Hello Express!"});
@@ -55,6 +59,24 @@ app.get('/api/customers', (req, res) => {
       //       'job' : '프로그래머'
       //     }]
     // );
+});
+
+// 실제로는 image폴더로 접근하는데 upload 폴더와 매핑
+app.use('/image', express.static('./upload'));
+
+app.post('/api/customers', upload.single('image'), (req, res) => {
+  let sql = 'INSERT INTO customer VALUES (null, ?, ?, ?, ?, ?)';
+  let image = '/image/' + req.file.filename;
+  let name = req.body.name;
+  let birthday = req.body.birthday;
+  let gender = req.body.gender;
+  let job = req.body.job;
+  let params = [image, name, birthday, gender, job];
+  connection.query(sql, params,
+    (err, rows, fields) => {
+      res.send(rows);
+    }
+  );
 });
 
 // 실제 app을 동작시켰을 때, 5000번 포트로 접속하여, 접속되었다면 아래 log 출력
