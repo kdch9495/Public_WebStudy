@@ -3,6 +3,21 @@
 import React from "react";
 import { post } from 'axios';
 
+// Material UI Madal design 구현
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField'; // text 입력란 lib
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+    hidden: {
+        display: 'none'
+    }
+});
+
 class CustomerAdd extends React.Component {
 
     // 생성자 정의
@@ -15,7 +30,8 @@ class CustomerAdd extends React.Component {
             birthday: '',
             gender: '',
             job: '',
-            fileName: '' //보내고자 하는 파일의 이름(파일명
+            fileName: '', //보내고자 하는 파일의 이름(파일명
+            open: false
         }
     }
 
@@ -34,7 +50,8 @@ class CustomerAdd extends React.Component {
             birthday: '',
             gender: '',
             job: '',
-            fileName: ''
+            fileName: '',
+            open: false
         })
         // window.location.reload(); // this.props.stateRefresh()이거 안되는거 일단 대체함
     }
@@ -71,7 +88,56 @@ class CustomerAdd extends React.Component {
         return post(url, formData, config);
     }
 
+    // 고객 추가 버튼을 눌렀을 때, 고객 추가 modal 팝업창이 뜨도록 할 때 사용하는 함수
+    handleClickOpen = () => { // = () => {} 바인딩 처리 : 동빈나유튜브: React 기초이론 학습하기
+        this.setState({
+            open: true
+        });
+    }
+
+    handleClose = () => {
+        this.setState({
+            file: null,
+            userName: '',
+            birthday: '',
+            gender: '',
+            job: '',
+            fileName: '',
+            open: false
+        })
+    }
+
     render() {
+        const { classes } = this.props;
+        return(
+            <div>
+                <Button variant="contained" color="primary" onClick={this.handleClickOpen}>
+                    고객 추가하기 
+                </Button>
+                <Dialog open={this.state.open} onClose={this.handleClose}>
+                    <DialogTitle>고객 추가</DialogTitle>
+                    <DialogContent>
+                        <input className={classes.hidden} accept="image/*" id="raised-button-file" type="file" file={this.state.file} value={this.state.fileName} onChange={this.handleFileChange}/><br/>
+                        <label htmlFor="raised-button-file">
+                            <Button variant="contained" color="primary" component="span" name="file">
+                                {this.state.fileName === "" ? "프로필 이미지 선택" : this.state.fileName}
+                            </Button>
+                        </label>
+                        <br/>
+                        <TextField label="이름" name="userName" value={this.state.userName} onChange={this.handleValueChange}/><br/>
+                        <TextField label="생년월일" name="birthday" value={this.state.birthday} onChange={this.handleValueChange}/><br/> 
+                        <TextField label="성별" name="gender" value={this.state.gender} onChange={this.handleValueChange}/><br/>
+                        <TextField label="직업" name="job" value={this.state.job} onChange={this.handleValueChange}/><br/>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="primary" onClick={this.handleFormSubmit}>추가</Button>
+                        <Button variant="outlined" color="primary" onClick={this.handleClose}>닫기</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+        )
+        /* 
+        material-ui modal 적용하지 않고 그냥 했을 때 !
         return(
             // 고객추가 버튼을 눌렀을때 handleFormSubmit 함수 실행
             // this.handleFormSubmit이 addCustomer 함수를 불러옴
@@ -87,8 +153,10 @@ class CustomerAdd extends React.Component {
                 <button type="submit">추가하기</button>
             </form>
         )
+        */
     }
 }
 
 // 외부 라이브러리에서 사용 가능하게 export 해주기
-export default CustomerAdd;
+// export default CustomerAdd; // 이게 default
+export default withStyles(styles)(CustomerAdd); // 스타일을 적용였을 때
