@@ -33,7 +33,7 @@ const upload = multer({dest: './upload'}) // 서버의 기본 root폴더에 있�
 // jsonlint.com 에서 validation 확인 가능 
 app.get('/api/customers', (req, res) => {
     connection.query(
-      "SELECT * FROM customer",
+      "SELECT * FROM customer WHERE isDeleted = 0",
       (err, rows, fields) => {
         res.send(rows);
       }
@@ -65,7 +65,7 @@ app.get('/api/customers', (req, res) => {
 app.use('/image', express.static('./upload'));
 
 app.post('/api/customers', upload.single('image'), (req, res) => {
-  let sql = 'INSERT INTO customer VALUES (null, ?, ?, ?, ?, ?)';
+  let sql = 'INSERT INTO customer VALUES (null, ?, ?, ?, ?, ?, now(), 0)';
   let image = '/image/' + req.file.filename;
   let name = req.body.name;
   let birthday = req.body.birthday;
@@ -77,6 +77,16 @@ app.post('/api/customers', upload.single('image'), (req, res) => {
       res.send(rows);
     }
   );
+});
+
+app.delete('/api/customers/:id', (req, res) => {
+  let sql = 'UPDATE CUSTOMER SET idDeleted = 1 WHERE id = ?';
+  let params = [req.params.id];
+  connection.query(sql, params,
+    (err, rows, fields) => {
+      res.send(rows);
+    }
+  )
 });
 
 // 실제 app을 동작시켰을 때, 5000번 포트로 접속하여, 접속되었다면 아래 log 출력
