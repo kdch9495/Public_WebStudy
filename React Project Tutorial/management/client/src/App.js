@@ -18,14 +18,15 @@ const styles= theme => ({
   // 바깥 쪽에 해당하는 root
   root: {
     width: '100%',
-    marginTop: theme.spacing.unit * 3, // 여백을 3의 가중치만큼 주기
+    // marginTop: theme.spacing.unit * 3, // 여백을 3의 가중치만큼 주기
+    marginTop: theme.spacing(3), // 여백을 3의 가중치만큼 주기
     overflowX: "auto" // X축으로 overflow가 작용
   },
   table: {
     minWidth: 1080 // 무조건 1080픽셀 이상 출력되어 가로스크롤바 생성됨
   },
   progress: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   }
 });
 
@@ -74,11 +75,26 @@ props or state 변경되는 경우 shouldComponentUpdate() 등이 사용되어 r
 
 class App extends Component {
 
-  // state는 변경 가능한 변수 처리 (초기화 변수)
-  state = {
-    customers: "",
-    completed: 0
+  constructor(props) {
+    super(props);
+    this.state = {
+      customers: '',
+      completed: 0
+    }
   }
+
+  // 고객데이터가 추가되었을때(CustomerAdd.js) 실행되었을 때 수행될 수 있게 하면 됨
+  // state 초기화 함수
+  stateRefresh = () => {
+    this.setState({
+      customers: '',
+      completed: 0
+    });
+    this.callApi()
+      .then(res => this.setState({customers: res}))
+      .catch(err => console.log(err));
+  }
+
 
   componentDidMount() {
     this.timer = setInterval(this.progress, 20); // 0.02초마다 실행
@@ -151,7 +167,7 @@ class App extends Component {
             </TableBody>
           </Table>
         </Paper>
-        <CustomerAdd/>
+        <CustomerAdd stateRefresh={this.stateRefresh}/>
       </div>
     );
   }
