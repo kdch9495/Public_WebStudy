@@ -1,5 +1,4 @@
 import React from 'react';
-
 // Material UI Madal design 구현
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -9,14 +8,12 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography'; 
 
 class CustomerDelete extends React.Component {
-
     // 생성자 명시하여 state값 초기화할 수 있도록 해줌
     constructor(props) {
         super(props);
         this.state = {
             open: false // modal창이 열려있는지 check 
         }
-
     }
 
     // 고객 추가 버튼을 눌렀을 때, 고객 추가 modal 팝업창이 뜨도록 할 때 사용하는 함수
@@ -41,17 +38,19 @@ class CustomerDelete extends React.Component {
         this.props.stateRefresh();
     }
 
-    render() { 
+    render() {
         return (
             <div>
                 {/* 디자인을 바꾸기 위해 variant="contained"를 속성으로 넣어줌 */}
                 <Button variant="contained" color="secondary" onClick={this.handleClickOpen}>삭제</Button>
                 <Dialog open={this.state.open} onClose={this.handleClose}>
                     <DialogTitle onClose={this.handleClose}>
-                        삭제
+                        삭제 경고
                     </DialogTitle>
-                    <DialogContent gutterBottom>
-                        선택한 고객 정보가 삭제됩니다.
+                    <DialogContent>
+                        <Typography gutterBottom>
+                            선택한 고객 정보가 삭제됩니다.
+                        </Typography>
                     </DialogContent>
                     <DialogActions>
                         <Button variant="contained" color="primary" onClick={(e) => {this.deleteCustomer(this.props.id)}}>삭제</Button>
@@ -59,9 +58,9 @@ class CustomerDelete extends React.Component {
                     </DialogActions>
                 </Dialog>
             </div>
-
         )
     }
+
 }
 
 export default CustomerDelete;

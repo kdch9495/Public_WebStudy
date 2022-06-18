@@ -19,7 +19,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
-import { fade } from '@material-ui/core/styles/colorManipulator';
+import { alpha } from '@material-ui/core/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -46,7 +46,7 @@ const styles= theme => ({
     marginRight: 18
   },
   progress: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   grow: {
     flexGrow: 1,
@@ -67,19 +67,19 @@ const styles= theme => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: alpha(theme.palette.common.white, 0.15),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit,
+      marginLeft: theme.spacing(),
       width: 'auto',
     },
   },
   searchIcon: {
-    width: theme.spacing.unit * 9,
+    width: theme.spacing(9),
     height: '100%',
     position: 'absolute',
     pointerEvents: 'none',
@@ -92,10 +92,10 @@ const styles= theme => ({
     width: '100%',
   },
   inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
+    paddingTop: theme.spacing(),
+    paddingRight: theme.spacing(),
+    paddingBottom: theme.spacing(),
+    paddingLeft: theme.spacing(10),
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
@@ -115,25 +115,8 @@ const styles= theme => ({
 //     'birthday' : '951221',
 //     'gender' : '남성',
 //     'job' : '직짱인'
-//   },
-//   {
-//     'id' : 2,
-//     'image' : 'http://placeimg.com/64/64/2',
-//     'name' : '길동',
-//     'birthday' : '951222',
-//     'gender' : '남성',
-//     'job' : '프로그래머'
-//   },
-//   {
-//     'id' : 3,
-//     'image' : 'http://placeimg.com/64/64/3',
-//     'name' : '찬동',
-//     'birthday' : '951223',
-//     'gender' : '남성',
-//     'job' : '직짱인3'
-//     }
+//   }
 // ]
-
 /*
 --- Component Life Cycle ---
 1) constructor() 불러오기
@@ -176,14 +159,14 @@ class App extends Component {
   }
 
   callApi = async () => {
-    const response = await fetch('api/customers');
+    const response = await fetch('/api/customers');
     const body = await response.json(); // json 형태로 body 변수에 담겠다
     return body;
   }
 
   progress = () => {
-    const {completed } = this.state;
-    this.setState({ completed: completed >= 100 ? 0 : completed + 1 });
+    const { completed } = this.state;
+    this.setState({ completed: completed >= 100 ? 0 : completed + 1});
   }
 
   // filter함수를 이용하여 고객검색 기능을 구현
@@ -268,9 +251,7 @@ class App extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-              {
-                // 
-                // this.state.customers ? this.state.customers.map(c => {
+                {/* // this.state.customers ? this.state.customers.map(c => {
                 //   return (
                 //     <Customer
                 //       stateRefresh={this.stateRefresh}
@@ -282,16 +263,16 @@ class App extends Component {
                 //       gender={c.gender}
                 //       job={c.job}
                 //     />
-                //   ) 
-                // 위의 코드를 함수형태로 재구현
-                this.state.customers ?
-                  filteredComponents(this.state.customers):
-                <TableRow>
-                  <TableCell colSpan="6" align="center">
-                    <CircularProgress className={classes.progress} variant ="determinate" value={this.state.completed}/>
-                  </TableCell>
-                </TableRow>
-                }
+                //   )  
+                // 위의 코드를 함수형태로 재구현*/}
+              {this.state.customers ? 
+                filteredComponents(this.state.customers) :
+              <TableRow>
+                <TableCell colSpan="6" align="center">
+                  <CircularProgress className={classes.progress} variant="determinate" value={this.state.completed}/>
+                </TableCell>
+              </TableRow>
+              }
             </TableBody>
           </Table>
         </Paper>
