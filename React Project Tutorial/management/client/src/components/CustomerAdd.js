@@ -26,7 +26,7 @@ class CustomerAdd extends React.Component {
             .then((response) => {
                 console.log(response.data);
                 // 안된다 지금 ㅠㅠ
-                // this.props.stateRefresh(); // 고객을 추가한 이후에 서버로부터 응답을 받고나서 고객목록을 불러오기 위해 이곳에 위치함
+                this.props.stateRefresh(); // 고객을 추가한 이후에 서버로부터 응답을 받고나서 고객목록을 불러오기 위해 이곳에 위치함
             })
         this.setState({
             file: null,
@@ -36,7 +36,7 @@ class CustomerAdd extends React.Component {
             job: '',
             fileName: ''
         })
-        window.location.reload(); // this.props.stateRefresh()이거 안되는거 일단 대체함
+        // window.location.reload(); // this.props.stateRefresh()이거 안되는거 일단 대체함
     }
 
     handleFileChange = (e) => {
